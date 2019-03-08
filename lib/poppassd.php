@@ -23,7 +23,7 @@
 
     function get_prompt() {
         $prompt = fgets($this->fp, 4096);
-        if (ereg("^[1-5][0-9][0-9]",$prompt))
+        if (preg_match("^[1-5][0-9][0-9]",$prompt))
         {
             if (substr($prompt, 0, 3) == "200") {
                 return true;

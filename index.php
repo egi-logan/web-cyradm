@@ -28,11 +28,11 @@ define('WC_BASE', dirname(__FILE__));
 $wc_configured = @file_exists(WC_BASE . '/config/conf.php');
 
 if ($wc_configured){
-	@include "DB.php";
-	if (!class_exists("DB")) {
-		die("Can't find PEAR:DB extension.");
+	@include "MDB2.php";
+	if (!class_exists("MDB2")) {
+		die("Can't find PEAR:MDB2 extension.");
 	}
-	#require "DB.php";
+	#require "MDB2.php";
 	include WC_BASE . "/config/conf.php";
 	include WC_BASE . "/lib/nls.php";
 	include WC_BASE . "/lib/crypto.php";

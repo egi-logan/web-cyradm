@@ -112,10 +112,10 @@ if ($authorized){
 				$daemon = new sieve($CYRUS['HOST'],"2000", $CYRUS['ADMIN'], $CYRUS['PASS'], $_GET['username']);
     				$query = "SELECT * FROM domain WHERE domain_name='".$_GET['domain']."'";
 				$result = $handle->query($query);
-				$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+				$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 				$freeaddress = $row['freeaddress'];
 				if ($freeaddress!="YES") {
-					$aliasname = spliti("@",$_GET['alias'],2);
+					$aliasname = explode("@",$_GET['alias'],2);
 					$aliasname = $aliasname[0];
 					$alias_new = $aliasname."@".$_GET['domain'];
 					if ($alias_new != $_GET['alias']) {

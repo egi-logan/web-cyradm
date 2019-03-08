@@ -19,7 +19,7 @@ if ($authorized) {
 	if (!empty($_GET['adddest'])) {
 		$query = "INSERT INTO virtual (alias,dest,username) values ('".$_GET['alias']."', '".$_GET['dest']."', '".$_GET['domain']."')";
 		$result = $handle->query($query);
-		if (DB::isError($handle)) {
+		if (MDB2::isError($handle)) {
 			print _("There was an error adding ".$_GET['dest']." to ".$_GET['alias'].".");
 		}
 	}
@@ -71,7 +71,7 @@ if ($authorized) {
 				$cssrow="row2";
 			}
 		
-			$row = $result->fetchRow(DB_FETCHMODE_ASSOC, $c);
+			$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, $c);
 			if ($row['username'] != $_GET['domain']) {
 				$action = _("Cannot remove from account");
 			} else {

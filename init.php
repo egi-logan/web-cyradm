@@ -7,18 +7,18 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 }
 
 # Connecting to database
-$handle =& DB::connect($DB['DSN'],true);
-if (DB::isError($handle)) {
+$handle =& MDB2::connect($DB['DSN'],true);
+if (MDB2::isError($handle)) {
 	die (_("Database error"));
 }
 
 #### Getting admin settings
 $query = "SELECT * FROM settings WHERE username='".$_SESSION['user']."'";
 $result = $handle->query($query);
-if (DB::isError($result)) {
+if (MDB2::isError($result)) {
 	die (_("Database error").": "._("Check scripts/upgrade-*.sql files."));
 }
-$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 $_SESSION['style'] = $row['style'];
 $_SESSION['warnlevel'] = $row['warnlevel'];
 
@@ -47,7 +47,7 @@ if (!$cnt){
 # We check and remember admin type (superuser or domain admin).
 $query2 = "SELECT * FROM adminuser WHERE username='".$_SESSION['user']."'";
 $result2 = $handle->query($query2);
-$row = $result2->fetchRow(DB_FETCHMODE_ASSOC, 0);
+$row = $result2->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 $_SESSION['admintype'] = $row['type'];
 
 # We check and remember list of domains for domain admin
@@ -55,7 +55,7 @@ if ($_SESSION['admintype'] != 0){
 	$allowed_domains = array();
 	
 	for ($i=0; $i < $cnt; $i++){
-		$row=$result->fetchRow(DB_FETCHMODE_ASSOC, $i);
+		$row=$result->fetchRow(MDB2_FETCHMODE_ASSOC, $i);
 		$allowed_domains[] = $row['domain_name'];
 	}
 	$_SESSION['allowed_domains'] = $allowed_domains;

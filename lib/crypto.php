@@ -21,17 +21,17 @@ class password{
 
 	function check($table, $username, $userinput, $encryption){
 		include WC_BASE . "/config/conf.php";
-		if (!class_exists("DB")) include "DB.php";
+		if (!class_exists("MDB2")) include "MDB2.php";
 
 		    $query = "SELECT password FROM $table WHERE username ='$username'";
-			$handle=DB::connect ($DB['DSN'],true);
+			$handle=MDB2::connect ($DB['DSN'],true);
 
-			if (DB::isError($handle)) {
+			if (MDB2::isError($handle)) {
 				die (_("Database error"));
 			}
 		
 	       	$result = $handle->query($query);
-			$row=$result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+			$row=$result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 
 		$dbinput = $row['password'];
 			
@@ -104,9 +104,9 @@ class password{
 		// If no encryption specified plain is used
 			
 		$query="UPDATE $table SET password='$newpassword' WHERE username='$username'";
-			$handle=DB::connect ($DB['DSN'],true);
+			$handle=MDB2::connect ($DB['DSN'],true);
 
-			if (DB::isError($handle)) {
+			if (MDB2::isError($handle)) {
                                 die (_("Database error"));
                         }
 
@@ -150,18 +150,18 @@ class password{
 	}
 	function mysql_password($input){
 	        include_once WC_BASE . "/config/conf.php";
-		include_once "DB.php";
+		include_once "MDB2.php";
 		global $DB;
 		
 		$query = "SELECT PASSWORD('" . $input . "')";
-		$handle=DB::connect ($DB['DSN'],true);
+		$handle=MDB2::connect ($DB['DSN'],true);
 
-		if (DB::isError($handle)) {
+		if (MDB2::isError($handle)) {
                         die (_("Database error"));
             	}
 
 		$result = $handle->query($query);
-		$row=$result->fetchRow(DB_FETCHMODE_ORDERED, 0);
+		$row=$result->fetchRow(MDB2_FETCHMODE_ORDERED, 0);
 
 		$password = $row[0];
 		return $password;

@@ -66,21 +66,21 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 			} else {
 				$query = "DELETE FROM adminuser WHERE username='".$_GET['username']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 
 				# The admin also needs to be deleted from the assigment table
 				$query = "DELETE FROM domainadmin WHERE adminuser='".$_GET['username']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 
 				# The admin also needs to be deleted from the settings table
 				$query = "DELETE FROM settings WHERE username='".$_GET['username']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 

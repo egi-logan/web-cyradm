@@ -94,13 +94,13 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 							$cssrow = "row2";
 						}
 
-						$row = $result->fetchRow(DB_FETCHMODE_ASSOC, $c);
+						$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, $c);
 						$username = $row['username'];
 						$query2 = "SELECT * FROM domainadmin WHERE adminuser='$username'";
 						$result2 = $handle->query($query2);
 						$cnt2 = $result2->numRows();
 
-						$row2 = $result2->fetchRow(DB_FETCHMODE_ASSOC, 0);
+						$row2 = $result2->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 						$domainname = $row2['domain_name'];
 						$type = $row['type'];
 
@@ -126,7 +126,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 							<td valign="middle">
 								<?php
 								for ($i = 0; $i < $cnt2; $i++){
-									$row2 = $result2->fetchRow(DB_FETCHMODE_ASSOC, $i);
+									$row2 = $result2->fetchRow(MDB2_FETCHMODE_ASSOC, $i);
 									$domainname = $row2['domain_name'];
 									if ($type){
 										print "$domainname<br>";

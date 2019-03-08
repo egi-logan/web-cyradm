@@ -78,26 +78,26 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 
 				$query ="DELETE FROM virtual WHERE username='".$_GET['username']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 
 				// Removing forwards
 				$query = "DELETE FROM virtual WHERE alias='".$_GET['username']."' AND username=''";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 
 				$query = "DELETE FROM accountuser WHERE username='".$_GET['username']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 
 				$query = "DELETE FROM log WHERE user='".$_GET['username']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 

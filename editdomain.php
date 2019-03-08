@@ -39,28 +39,28 @@ if ($authorized) {
 				$query_result = true;
 				$query = "UPDATE domain SET domain_name='".$_GET['newdomain']."', maxaccounts='".$_GET['maxaccounts']."', quota='".$_GET['quota']."', domainquota='".$_GET['domainquota']."', freenames='".$freenames."',freeaddress='".$freeaddress."', folders='".$_GET['defaultfolders']."', prefix='".$_GET['newprefix']."' WHERE domain_name='".$_GET['domain']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)){
+				if (MDB2::isError($result)){
 					$query_result = false;
 				}
 				if ($_GET['newdomain'] != $_GET['domain']) {
 					// update accounts to be associated to the new domain
 					$query = "UPDATE accountuser SET domain_name='".$_GET['newdomain']."' WHERE domain_name='".$_GET['domain']."'";
 					$result = $handle->query($query);
-					if (DB::isError($result)){
+					if (MDB2::isError($result)){
 						$query_result = false;
 					}
 
 					// update domainadmins to have rights transferred to the new domainname
 					$query = "UPDATE domainadmin SET domain_name='".$_GET['newdomain']."' WHERE domain_name='".$_GET['domain']."'";
 					$result = $handle->query($query);
-					if (DB::isError($result)){
+					if (MDB2::isError($result)){
 						$query_result = false;
 					}
 
 					// update aliases to be associated to the new domain
 					$query = "UPDATE virtual SET username='".$_GET['newdomain']."' WHERE username='".$_GET['domain']."'";
 					$result = $handle->query($query);
-					if (DB::isError($result)){
+					if (MDB2::isError($result)){
 						$query_result = false;
 					}
 					// ok, everything ok so far. now let's update all aliases and destinations to the new domainname.					
@@ -98,7 +98,7 @@ if ($authorized) {
 		} elseif (empty($_GET['confirmed'])) {
 				$query = "SELECT * FROM domain WHERE domain_name='".$_GET['domain']."'";
 				$result = $handle->query($query);
-				$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+				$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 				$domain = $row['domain_name'];
 				$prefix = $row['prefix'];
 				$maxaccounts = $row['maxaccounts'];

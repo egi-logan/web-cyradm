@@ -62,7 +62,7 @@ if ($authorized) {
 			$cssrow="row2";
 		}
 
-		$row=$result->fetchRow(DB_FETCHMODE_ASSOC,$c);
+		$row=$result->fetchRow(MDB2_FETCHMODE_ASSOC,$c);
 		$domain = $row['domain_name'];
 
 		print "<tr class=\"$cssrow\"> \n";
@@ -154,7 +154,7 @@ if ($authorized) {
 				$cssrow="row2";
 			}
 
-			$row=$result->fetchRow(DB_FETCHMODE_ASSOC,$c);
+			$row=$result->fetchRow(MDB2_FETCHMODE_ASSOC,$c);
 			$username=$row['username'];
 			$domain=$row['domain_name'];
 			$services = array();
@@ -175,12 +175,12 @@ if ($authorized) {
 
 			for ($c2=0;$c2<$cnt2;$c2++){
 				# Print All Emailadresses found for the account
-				$row2 = $result2->fetchRow(DB_FETCHMODE_ASSOC, $c2);
+				$row2 = $result2->fetchRow(MDB2_FETCHMODE_ASSOC, $c2);
 				print $row2['alias']."<br>";
 			}
 			$query3 = "SELECT dest FROM virtual WHERE alias='".$username."' AND username=''";
 			$result3 = $handle->query($query3);
-			$row = $result3->fetchRow(DB_FETCHMODE_ASSOC, 0);
+			$row = $result3->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 			if (is_array($row)) {
 				print "<br><b>"._("Forwards").":</b><br><br>";
 				$forwards_tmp = preg_split('|,\s*|', stripslashes($row['dest']));
@@ -199,8 +199,8 @@ if ($authorized) {
 			print "</td>\n<td align=\"center\" valign=\"middle\">";
 			$query3 = "SELECT * FROM log WHERE user='".$username."' ORDER BY time DESC";
 			$result3 = $handle->query($query3);
-			if (! DB::isError($result3)){
-				$row3 = $result3->fetchRow(DB_FETCHMODE_ASSOC, 0);
+			if (! MDB2::isError($result3)){
+				$row3 = $result3->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 				$lastlogin = $row3['time'];
 			} else {
 				$lastlogin = '';
@@ -302,7 +302,7 @@ if ($authorized) {
 			} else {
 				$cssrow="row2";
 			}
-			$row = $result3->fetchRow( DB_FETCHMODE_ASSOC, $c);
+			$row = $result3->fetchRow( MDB2_FETCHMODE_ASSOC, $c);
 			$alias = $row['alias'];
 			$domain = $row['username'];
 ?>
@@ -316,7 +316,7 @@ if ($authorized) {
 			$result4 = $handle->limitQuery($query4, 0, 3);
 			$num_dest = $result4->numRows ($result4);
 			for ($d=0; $d<$num_dest; $d++) {
-				$row2 = $result4->fetchRow (DB_FETCHMODE_ASSOC, $d);
+				$row2 = $result4->fetchRow (MDB2_FETCHMODE_ASSOC, $d);
 				if ($d!= 0) {
 					echo ", ";
 				}

@@ -45,7 +45,7 @@ if ($authorized){
 	$result = $handle->query($query);
 	$cnt = $result->numRows();
 	if ($cnt) {
-		$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+		$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 		$forw_is_set = 1;
 	} else {
 		$forw_is_set = 0;

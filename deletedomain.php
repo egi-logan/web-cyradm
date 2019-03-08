@@ -82,7 +82,7 @@ if ($authorized) {
 					$result = $handle->query($query);
 
 					for ($i=0; $i<$cnt1; $i++) {
-						$row = $result1->fetchRow(DB_FETCHMODE_ASSOC, $i);
+						$row = $result1->fetchRow(MDB2_FETCHMODE_ASSOC, $i);
 						$username = $row['username'];
 						$query = "DELETE FROM virtual WHERE username='".$username."'";
 						$result = $handle->query($query);
@@ -107,7 +107,7 @@ if ($authorized) {
 
 						# After getting the resulttable we search for the adminuser 
 						# in each row
-						$row = $result->fetchRow(DB_FETCHMODE_ASSOC,$i);
+						$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC,$i);
 						$username = $row['adminuser'];
 
 						$query = "SELECT * FROM domainadmin where adminuser='".$username."'";

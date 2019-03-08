@@ -23,14 +23,14 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
                 require_once WC_BASE . '/config/conf.php';
                 $query1 = "SELECT * FROM domain WHERE domain_name='$domain'";
 		
-                $handle = DB::connect($DB['DSN'], true);
-                if (DB::isError($handle)) {
+                $handle = MDB2::connect($DB['DSN'], true);
+                if (MDB2::isError($handle)) {
     	            die (_("Database error"));
                 }
 
                 $result1 = $handle->query($query1);
 
-		$row = $result1->fetchRow(DB_FETCHMODE_ASSOC, 0);
+		$row = $result1->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 
 	        $prefix         = $row['prefix'];
 	        $maxaccounts    = $row['maxaccounts'];

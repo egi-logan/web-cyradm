@@ -15,10 +15,10 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 		if ($authorized) {
 	                $query = "SELECT freeaddress FROM domain WHERE domain_name='".$_GET['domain']."'";
 	 		$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
-			$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+			$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 			$freeaddress=$row['freeaddress'];
 		
 			if (!empty($_GET['confirmed']) && empty($_GET['cancel'])) {
@@ -29,7 +29,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 				}
 				$result = $handle->query($query);
 
-				if (!DB::isError($result)) {
+				if (!MDB2::isError($result)) {
 					?>
 					<h3>
 						<?php print _("Successfully added");?>:

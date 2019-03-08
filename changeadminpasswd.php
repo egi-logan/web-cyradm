@@ -93,7 +93,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 			# If the new_password field is not empty and the password matches, update the password
 			$query = "UPDATE adminuser SET password='".$new_password."' WHERE username='".$_SESSION['user']."' AND password='".$old_password."'";
 			$result =& $handle->query($query);
-			if (DB::isError($result) || $handle->affectedRows()==0) {
+			if (MDB2::isError($result) || $handle->affectedRows()==0) {
 				print _("Database error");
 				echo ".&nbsp;";
 				print _("Password not changed");

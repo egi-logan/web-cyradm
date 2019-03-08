@@ -16,10 +16,10 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 		if (empty($_POST['confirmed'])) {
 			$query = "SELECT type FROM adminuser WHERE username='".$_GET['username']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
-			$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+			$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 			$type = $row['type'];
 			?>
 			<h3>
@@ -119,7 +119,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 								# Query for what domains this admin is already reponsible for
 								$query = "SELECT * FROM domainadmin WHERE adminuser='".$_GET['username']."'";
 								$result = $handle->query($query);
-								if (DB::isError($result)) {
+								if (MDB2::isError($result)) {
 									die (_("Database error"));
 								}
 								$cnt = $result->numRows();
@@ -131,7 +131,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 									print "</h4>";
 									print "</td></tr><tr>";
 									for ($i=0; $i<$cnt; $i++) {
-										$row = $result->fetchRow(DB_FETCHMODE_ASSOC, $i);
+										$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, $i);
 										$resp_domain = $row['domain_name'];
 										print "<td>";
 										print $resp_domain;
@@ -181,17 +181,17 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 		elseif (!empty($_POST['confirmed'])){
 				$query = "SELECT type FROM adminuser WHERE username='".$_POST['username']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
-				$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+				$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 				$type = $row['type'];
 
 				if ($type != $_POST['newtype'] || $type = '1') {
 					# First delete and set new Domainresponsibilities
 					$query = "DELETE FROM domainadmin WHERE adminuser='".$_POST['username']."'";
 					$result = $handle->query($query);
-					if (DB::isError($result)) {
+					if (MDB2::isError($result)) {
 						die (_("Database error"));
 					}
 				}
@@ -201,7 +201,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 					# Update the type of this admin
 					$query = "UPDATE adminuser SET type='".$_POST['newtype']."' WHERE username='".$_POST['username']."'";
 					$result = $handle->query($query);
-					if (DB::isError($result)) {
+					if (MDB2::isError($result)) {
 						die (_("Database error"));
 					}
 					
@@ -209,7 +209,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 						# Set responsibility for all domains to superuser
 						$query = "INSERT INTO domainadmin (domain_name,adminuser) VALUES ('*','".$_POST['username']."')";
   						$result = $handle->query($query);
-						if (DB::isError($result)) {
+						if (MDB2::isError($result)) {
 							die (_("Database error"));
 						}
 					} else {
@@ -221,7 +221,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 						foreach ($_POST['resp_domain'] as $key => $r_domain){
 							$query = "INSERT INTO domainadmin (domain_name,adminuser) VALUES('$key', '".$_POST['username']."')";
 							$result = $handle->query($query);
-							if (DB::isError($result)) {
+							if (MDB2::isError($result)) {
 								die (_("Database error"));
 							}
 						}
@@ -231,7 +231,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 					if (!empty($_POST['newdomain'])){
 						$query = "INSERT INTO domainadmin (domain_name,adminuser) VALUES('".$_POST['newdomain']."','".$_POST['username']."')";
 						$result = $handle->query($query);
-						if (DB::isError($result)) {
+						if (MDB2::isError($result)) {
 							die (_("Database error"));
 						}
 					}
@@ -244,7 +244,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 					# If the new_password field is not empty and the password matches, update the password
 					$query = "UPDATE adminuser SET password='".$new_password."' WHERE username='".$_POST['username']."'";
 					$result = $handle->query($query);
-					if (DB::isError($result)) {
+					if (MDB2::isError($result)) {
 						die (_("Database error"));
 					}
 				}

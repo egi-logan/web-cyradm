@@ -32,7 +32,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 
 	$query = "SELECT * FROM accountuser where domain_name='".$_GET['domain']."' ORDER BY username";
 	$result = $handle->query($query);
-	if (DB::isError($result)) {
+	if (MDB2::isError($result)) {
 		die (_("Database error"));
 	}
 	$cnt = $result->numRows($result);
@@ -111,21 +111,21 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 						$cssrow = "row2";
 					}
 
-					$row = $result->fetchRow(DB_FETCHMODE_ASSOC, $c);
+					$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, $c);
 					$domain = $row['domain_name'];
 					$username = $row['username'];
 
 					$query2 = "SELECT * FROM virtual WHERE dest='".$username."' AND username='".$username."'"; # AND alias  !='$username'"; 
 					$result2 = $handle->query($query2);
-					if (DB::isError($result2)) {
+					if (MDB2::isError($result2)) {
 						die (_("Database error"));
 					}
 					$cnt2 = $result2->numRows($result2);
 
 					$query3 = "SELECT * FROM log WHERE user='".$username."' ORDER BY time DESC";
 					$result3 = $handle->query($query3); 
-					if (! DB::isError($result3)){
-						$row3 = $result3->fetchRow(DB_FETCHMODE_ASSOC, 0);
+					if (! MDB2::isError($result3)){
+						$row3 = $result3->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 						$lastlogin = $row3['time'];
 					} else {
 						$lastlogin = '';
@@ -165,15 +165,15 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 							<?php
 							// Print All Emailadresses found for the account
 							for ($c2 = 0; $c2 < $cnt2; $c2++){
-								$row2 = $result2->fetchRow(DB_FETCHMODE_ASSOC, $c2);
+								$row2 = $result2->fetchRow(MDB2_FETCHMODE_ASSOC, $c2);
 								print $row2['alias'] . "<br>";
 							}
 				                        $query4 = "SELECT * FROM virtual WHERE alias='".$username."' AND username=''";
 							$result4 = $handle->query($query4);
-							if (DB::isError($result4)) {
+							if (MDB2::isError($result4)) {
 								die (_("Database error"));
 							}
-							$row4 = $result4->fetchRow(DB_FETCHMODE_ASSOC, 0);
+							$row4 = $result4->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 							if (is_array($row4)){
 							    #print "<hr color=\"ffffff\"><b>" . _("Forwards") . ":</b><br>";
 							    print "<hr class=table><b>" . _("Forwards") . ":</b><br>";
@@ -203,16 +203,13 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 							<?php
 							if ($DOMAIN_AS_PREFIX){
 								$quota = $cyr_conn->getquota("user/" . $username);
-                                                                 if ($quota['used'] == "in"){
-                                                                   // first one on each page returns something odd
-                                                                   // do it once more
-                                                                   $quota = $cyr_conn->getquota("user/" . $username);
 							} else {
 								$quota = $cyr_conn->getquota("user." . $username);
-                                                                 if ($quota['used'] == "in"){
-                                                                   // first one on each page returns something odd
-                                                                   // do it once more
-                                                                   $quota = $cyr_conn->getquota("user." . $username);
+                                                                if ($quota['used'] == "in"){
+                                                                  // first one on each page returns something odd
+                                                                  // do it once more
+                                                                  $quota = $cyr_conn->getquota("user." . $username);
+								}
 							}
 
 							if ($quota['used'] != "NOT-SET"){

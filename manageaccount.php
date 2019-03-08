@@ -35,13 +35,13 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 
 				$query = "SELECT * FROM accountuser WHERE username ='".$_GET['username']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 				$cnt = $result->numRows($result);
 
 				if ($cnt) {
-					$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+					$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 					if ($row['imap']) {
 						$imap_checked="checked";
 					}					
@@ -59,13 +59,13 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 				$query = "SELECT status FROM virtual WHERE username ='".$_GET['username']."' LIMIT 1";
 				$result = $handle->query($query);
 
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 				        die (_("Database error"));
 				}
 				$cnt = $result->numRows($result);
 
 				if ($cnt) {
-					$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+					$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 					if ($row['status']) {
 						$smtp_checked="checked";
 					}
@@ -147,7 +147,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 						</td>
 
 						<td>
-							<input class="inputfield" type="text" size="10" name="quota" value="<?php print $q_total = $q['qmax']; ?>" > Kbytes
+<input class="inputfield" type="text" size="10" name="quota" value="<?php $q = $cyr_conn->getquota("user." . $_GET['username']); print $q_total = $q['qmax']; ?>" > Kbytes
 						</td>
 					</tr>
 					</table>
@@ -208,10 +208,10 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 				if (!empty($_POST['new_password']) && !empty($_POST['confirm_password'])) {
 					$query = "SELECT password FROM accountuser WHERE username='".$_POST['username']."'";
 					$result = $handle->query($query);
-					if (DB::isError($result)) {
+					if (MDB2::isError($result)) {
 						die (_("Database error"));
 					}
-					$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+					$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 					$password = $row['password'];
 
 					if ($PASSWORD_CHANGE_METHOD=="sql"){
@@ -219,7 +219,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 						$new_password = $pwd->encrypt($_POST['new_password'], $CRYPT);
 						$query = "UPDATE accountuser SET password='$new_password' WHERE username='".$_POST['username']."'";
 						$result = $handle->query($query);
-						if (DB::isError($result)) {
+						if (MDB2::isError($result)) {
 							die (_("Database error"));
 						} else {
 							print "<h3>"._("Password changed")."</h3>";
@@ -271,10 +271,10 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 				if ($q['qmax']!=$_POST['quota']) {
 				$query = "SELECT prefix,domainquota FROM domain WHERE domain_name='".$_POST['domain']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
-				$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+				$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 			
 				$prefix = $row['prefix'];
 				$domain_quota = $row['domainquota'];
@@ -285,14 +285,14 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 
 					$query = "SELECT username FROM accountuser WHERE prefix='$prefix' ORDER BY username";
 					$result = $handle->query($query);
-					if (DB::isError($result)) {
+					if (MDB2::isError($result)) {
 						die (_("Database error"));
 					}
 
 					$cnt = $result->numRows($result);
 
 					for ($c = 0; $c < $cnt; $c++) {
-						$row = $result->fetchRow(DB_FETCHMODE_ASSOC, $c);
+						$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, $c);
 						$user_quota = $cyr_conn->getquota("user" . $_sep . $row['username']);
 						if ($user_quota['qmax'] != "NOT-SET"){
 							$used_domain_quota += $user_quota['qmax'];

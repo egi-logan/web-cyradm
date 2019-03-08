@@ -15,12 +15,12 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 if ($authorized){
 	$query = "SELECT * FROM domain WHERE domain_name='".$_GET['domain']."'";
 	$result = $handle->query($query);
-	$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+	$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 	$freeaddress=$row['freeaddress'];
 
 	$query = "SELECT * FROM virtual WHERE alias='".$_GET['alias']."'";
 	$result = $handle->query($query);
-	$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+	$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 	$alias = $row['alias'];
 
 	if (!empty($_GET['confirmed']) && empty($_GET['cancel'])) {
@@ -30,7 +30,7 @@ if ($authorized){
 			$query = "UPDATE virtual SET alias='".$_GET['newalias']."@".$_GET['aliasdomain']."', dest='".$_GET['newdest']."' WHERE alias='".$alias."' AND username='".$_GET['username']."'";
 		}
 		$result = $handle->query($query);
-		if (!DB::isError($result)){
+		if (!MDB2::isError($result)){
 ?>
 			<h3>
 				<?php print _("Successfully changed");?>
@@ -47,7 +47,7 @@ if ($authorized){
 	} elseif (!empty($_GET['cancel'])) {
 		include WC_BASE . "/editaccount.php";
 	} else {
-		$alias_orig = spliti('@',$alias,2);
+		$alias_orig = preg_split('/\@/i',$alias,2);
 		$aliasname = $alias_orig[0];
 		$aliasdomain = $alias_orig[1];
 		$dest = $row['dest'];

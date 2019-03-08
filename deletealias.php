@@ -54,7 +54,7 @@ if ($authorized) {
 			// Remove a destination
 			$query = "DELETE FROM virtual WHERE alias='".$_GET['alias']."' AND dest='".$_GET['dest']."' AND username = '".$_GET['domain']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			} else {
 				print _("Removed")." <b>".$_GET['dest']."</b> "._("from")." <b>".$_GET['alias']."</b>.\n";
@@ -64,7 +64,7 @@ if ($authorized) {
 			// Removing an entire alias
 			$query = "DELETE FROM virtual WHERE alias = '".$_GET['alias']."' AND username = '".$_GET['domain']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			} else {
 				print _("Removed the alias")." <b>".$_GET['alias']."</b>\n";

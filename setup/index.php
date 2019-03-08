@@ -58,10 +58,10 @@ if (!empty($dbroot) && !empty($dbrootpassword)){
 	$DB_NAME="mysql";
 	$DB_PROTOCOL="unix"; // set to "tcp" for TCP/IP
 	$DSN="$DB_TYPE://$dbroot:$dbrootpassword@$DB_PROTOCOL+$DB_HOST/$DB_NAME";
-	$handle = DB::connect($DSN, true);
+	$handle = MDB2::connect($DSN, true);
 
 
-	if (DB::isError($handle)) {
+	if (MDB2::isError($handle)) {
 		#die (_("Database error"));
 		die ("<h3><font color='red'>Database error</font></h3>");
 	}
@@ -71,7 +71,7 @@ if (!empty($dbroot) && !empty($dbrootpassword)){
 	$result=$handle->query($query);
 	$count=$result->numRows($result);
 
-	if (DB::isError($handle)) {
+	if (MDB2::isError($handle)) {
 		print $handle->getMessage();
 	}
 
@@ -86,7 +86,7 @@ if (!empty($dbroot) && !empty($dbrootpassword)){
 <option value=\"new\" selected>New Database</option>\n<option ";
 
 	for ($i=0;$i<$count;$i++){
-		$row=$result->fetchRow(DB_FETCHMODE_ASSOC, $i);
+		$row=$result->fetchRow(MDB2_FETCHMODE_ASSOC, $i);
 		if ($row['Database']==$dbname){
 			print "selected ";
 		}

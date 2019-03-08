@@ -19,11 +19,11 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 			$query = "SELECT * FROM domain WHERE domain_name='".$_POST['domain']."'";
 		}
 		$result = $handle->query($query);
-		if (DB::isError($result)) {
+		if (MDB2::isError($result)) {
 			die (_("Database error"));
 		}
 
-		$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+		$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 
 		$prefix		= $row['prefix'];
 		$maxaccounts	= $row['maxaccounts'];
@@ -50,7 +50,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 			# Why prefix, not domain_name?
 			$query = "SELECT * FROM accountuser WHERE prefix='$prefix' order by username";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
 			$cnt = $result->numRows();
@@ -65,7 +65,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 				}
 
 				for ($c = 0; $c < $cnt; $c++) {
-					$row = $result->fetchRow(DB_FETCHMODE_ASSOC, $c);
+					$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, $c);
 					
 					$_sep = '.';
 					if ($DOMAIN_AS_PREFIX) {
@@ -138,13 +138,13 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 					} else {
 						$lastaccount = $prefix."0000";
 						if ($cnt > 0){
-							$row = $result->fetchRow(DB_FETCHMODE_ASSOC, $cnt - 1);
+							$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, $cnt - 1);
 							$lastaccount = $row['username'];
 						}
 					}
 					// END Andreas Kreisl : freenames
 
-					$test = ereg ("[0-9][0-9][0-9][0-9]$", $lastaccount, $result_array);
+					$test = preg_match ("[0-9][0-9][0-9][0-9]$", $lastaccount, $result_array);
 					$next = $result_array[0] + 1;
 
 					$nextaccount = sprintf("%04d",$next);
@@ -282,13 +282,13 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 			
 			$query = "INSERT INTO accountuser (username, password, prefix, domain_name) VALUES ('".$username."','".$password."','".$prefix."','".$_POST['domain']."')";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
 
 			$query = "INSERT INTO virtual (alias, dest, username, status) values ( '".$_POST['email']."@".$_POST['domain']."','".$username."','".$username."','1')";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
 			?>

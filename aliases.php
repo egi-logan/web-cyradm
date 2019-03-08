@@ -63,7 +63,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 			} else {
 				$cssrow = "row2";
 			}
-			$row = $result->fetchRow(DB_FETCHMODE_ASSOC,$c);
+			$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC,$c);
 			$alias = $row['alias'];	
 		?>
 		<tr class="<?php print($cssrow); ?>">
@@ -79,7 +79,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 			$cnt = $result1->numRows();
 			$num_dest = ($cnt<3)?($cnt):(3);
 			for($d = 0;$d < $num_dest;$d++) {
-				$row2 = $result1->fetchRow(DB_FETCHMODE_ASSOC,$d);
+				$row2 = $result1->fetchRow(MDB2_FETCHMODE_ASSOC,$d);
 				if($d != 0) {
 					print ", ";
 				}

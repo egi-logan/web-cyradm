@@ -74,7 +74,7 @@ if ($authorized) {
 						} else {
 							$cssrow="row2";
 						}
-						$row = $result->fetchRow(DB_FETCHMODE_ASSOC, $c);
+						$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, $c);
 						$alias = $row['alias'];
 ?>
 

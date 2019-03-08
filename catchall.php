@@ -23,7 +23,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 			$query = "SELECT * FROM virtual WHERE alias='@".$_GET['domain']."'";
 			$result = $handle->query($query);
 			$cnt = $result->numRows();
-			$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+			$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 			$current_username=$row['username'];
 
 			if (empty($cnt) OR $current_username != $username){
@@ -104,7 +104,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 			# And then add the new one
 			$query = "INSERT INTO virtual (alias, dest, username, status) values ('@".$_GET['domain']."' , '$username' , '$username' , '1')";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			} else {
 			?>

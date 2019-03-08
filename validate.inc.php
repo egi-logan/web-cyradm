@@ -42,7 +42,7 @@ if ($_POST){
 // ############################### FUNCTIONS ##################################
 
 function ValidMail($email) {
-	if (!eregi("^[0-9a-z]([-_.]?[0-9a-z])*@([[:alnum:]]|xn--)([.-]?[[:alnum:]])*[.][a-wyz][[:alpha:]](f|g|l|m|t|u|v|z|ro|fo|op|pa|me|seum)?$",$email)){
+	if (!preg_match("/^[0-9a-z]([-_.]?[0-9a-z])*@([[:alnum:]]|xn--)([.-]?[[:alnum:]])*[.][a-wyz][[:alpha:]](f|g|l|m|t|u|v|z|ro|fo|op|pa|me|seum)?$/i",$email)){
 		return FALSE;
 	} else {
 		return TRUE;
@@ -66,7 +66,7 @@ function ValidPassword($password) {
 }
 
 function ValidDomain($domain) {
-	if (!eregi("^([[:alnum:]]|xn--)([.-]?[[:alnum:]])*[.][a-wyz][[:alpha:]](f|g|l|m|t|u|v|z|ro|fo|op|pa|me|seum)?$",$domain)){
+	if (!preg_match("/^([[:alnum:]]|xn--)([.-]?[[:alnum:]])*[.][a-wyz][[:alpha:]](f|g|l|m|t|u|v|z|ro|fo|op|pa|me|seum)?$/",$domain)){
 		return FALSE;
 	} else {
 		return TRUE;
@@ -79,7 +79,7 @@ function ValidPrefix($prefix) {
 	if ($DOMAIN_AS_PREFIX) {
 		return ValidDomain($prefix);
 	} else {
-//		if (!eregi("^[[:alnum:]_-]+$",$prefix)){
+//		if (!preg_match("/^[[:alnum:]_-]+$/i",$prefix)){
 		if (empty($prefix)) {
 			return FALSE;
 		} else {
@@ -116,15 +116,15 @@ $reserved=explode(",",$RESERVED);
 $setforward = $forwardto = (isset($_POST['setforward']))?($_POST['setforward']):('');
 
 # Connecting to database
-$handle =& DB::connect($DB['DSN'],true);
-if (DB::isError($handle)) {
+$handle =& MDB2::connect($DB['DSN'],true);
+if (MDB2::isError($handle)) {
 	die (_("Database error"));
 }
 
 # We check and remember list of domains for domain admin
 $query = "SELECT * FROM domainadmin WHERE adminuser='".$_SESSION['user']."'";
 $result = $handle->query($query);
-if (DB::isError($result)) {
+if (MDB2::isError($result)) {
 	die (_("Database error"));
 }
 $cnt = $result->numRows();
@@ -140,7 +140,7 @@ if ($_SESSION['admintype'] != 0){
 	$allowed_domains = array();
 	
 	for ($i=0; $i < $cnt; $i++){
-		$row=$result->fetchRow(DB_FETCHMODE_ASSOC, $i);
+		$row=$result->fetchRow(MDB2_FETCHMODE_ASSOC, $i);
 		$allowed_domains[] = $row['domain_name'];
 	}
 	$_SESSION['allowed_domains'] = $allowed_domains;
@@ -232,7 +232,7 @@ if (! empty($action)){
 				# Check if admin already exists
 				$query = "SELECT * FROM adminuser WHERE username='".$_POST['newadminuser']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 				if ($result->numRows()){
@@ -248,7 +248,7 @@ if (! empty($action)){
 					# Check if domain already exists
 					$query="SELECT domain_name FROM domain WHERE domain_name='".$_POST['newdomain']."'";
 					$result= $handle->query($query);
-					if (DB::isError($result)) {
+					if (MDB2::isError($result)) {
 						die (_("Database error"));
 					}
 					if (!$result->numRows()){
@@ -292,10 +292,10 @@ if (! empty($action)){
 			} else {
 				$query = "SELECT type FROM adminuser WHERE username='".$_POST['username']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
-				$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+				$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 				$type = $row['type'];
 				
 				if ($type != $_POST['newtype']) {
@@ -306,7 +306,7 @@ if (! empty($action)){
 						# Query to get the count of superusers
 						$query = "SELECT type FROM adminuser WHERE type='0'";
 						$result = $handle->query($query);
-						if (DB::isError($result)) {
+						if (MDB2::isError($result)) {
 							die (_("Database error"));
 						}
 						$cnt = $result->numRows();
@@ -332,7 +332,7 @@ if (! empty($action)){
 					# Check if domain already exists
 					$query = "SELECT domain_name FROM domain WHERE domain_name='".$_POST['newdomain']."'";
 					$result = $handle->query($query);
-					if (DB::isError($result)) {
+					if (MDB2::isError($result)) {
 						die (_("Database error"));
 					}
 					if (!$result->numRows()){
@@ -341,7 +341,7 @@ if (! empty($action)){
 					} else {
 						$query = "SELECT * FROM domainadmin WHERE adminuser='".$_POST['username']."' AND domain_name='".$_POST['newdomain']."'";
 						$result = $handle->query($query);
-						if (DB::isError($result)) {
+						if (MDB2::isError($result)) {
 							die (_("Database error"));
 						}
 						if ($result->numRows()) {
@@ -382,16 +382,16 @@ if (! empty($action)){
 				#Determine what type of admin should be deleted
 				$query = "SELECT type FROM adminuser WHERE username='".$_GET['username']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
-				$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+				$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 				$type = $row['type'];
 
 				# Query to get the count of superusers
 				$query = "SELECT type FROM adminuser WHERE type='0'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 				$cnt = $result->numRows();
@@ -452,7 +452,7 @@ if (! empty($action)){
 				# Check to see if there's an account with the same username
 				$query = "SELECT * FROM accountuser WHERE username='".$_POST['username']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 				$cnt = $result->numRows();
@@ -464,7 +464,7 @@ if (! empty($action)){
 				# Check to see if there's an email with the same name
 				$query = "SELECT alias FROM virtual WHERE alias='".$_POST['email']."@".$_POST['domain']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 				$cnt = $result->numRows();
@@ -477,7 +477,7 @@ if (! empty($action)){
 				# Superusers can override
 				$query = "SELECT quota FROM domain WHERE domain_name='".$_POST['domain']."'";
 				$result = $handle->query($query);
-				$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+				$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 				# $quota2 is the allowed quota, $quota the requested quota for the account
 				$quota2=$row['quota'];
 
@@ -503,7 +503,7 @@ if (! empty($action)){
 			# it's needed to defend users from not allowed domains
 			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
 			if (!$result->numRows()){
@@ -528,7 +528,7 @@ if (! empty($action)){
 			# it's needed to defend users from not allowed domains
 			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
 			if (!$result->numRows()){
@@ -549,7 +549,7 @@ if (! empty($action)){
 			} else {
 				$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 				if (!$result->numRows()) {
@@ -570,7 +570,7 @@ if (! empty($action)){
 			} else {
 				$query = "SELECT username FROM accountuser WHERE username='".$_POST['username']."' AND domain_name='".$_POST['domain']."'";
 				$result = $handle->query($query);
-				if (DB::isError($result)) {
+				if (MDB2::isError($result)) {
 					die (_("Database error"));
 				}
 				if (!$result->numRows()) {
@@ -613,16 +613,16 @@ if (! empty($action)){
 					} else {
 						$query = "SELECT quota FROM domain WHERE domain_name='".$_POST['domain']."'";
 						$result = $handle->query($query);
-						if (DB::isError($result)) {
+						if (MDB2::isError($result)) {
 							die (_("Database error"));
 						}
 
-						$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+						$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 						$max_quota = $row['quota'];
 					
 						$query = "SELECT * FROM accountuser WHERE username='".$_POST['username']."' AND domain_name='".$_POST['domain']."'";
 						$result = $handle->query($query);
-						if (DB::isError($result)) {
+						if (MDB2::isError($result)) {
 							die (_("Database error"));
 						}
 					
@@ -648,7 +648,7 @@ if (! empty($action)){
 		} else {
 			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
 			if (!$result->numRows()){
@@ -659,10 +659,10 @@ if (! empty($action)){
 				if (!empty($_GET['confirmed']) && empty($_GET['cancel'])) {
 			                $query = "SELECT freeaddress FROM domain WHERE domain_name='".$_GET['domain']."'";
 					$result = $handle->query($query);
-					if (DB::isError($result)) {
+					if (MDB2::isError($result)) {
 						die (_("Database error"));
 					}
-					$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+					$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 					$freeaddress = $row['freeaddress'];
 					if ($freeaddress != "YES") {
 						$valid_alias = ValidMail($_GET['alias']."@".$_GET['domain']);
@@ -689,7 +689,7 @@ if (! empty($action)){
 							$query .= $_GET['alias']."@".$_GET['aliasdomain']."'";
 						}
 						$result = $handle->query($query);
-						if (DB::isError($result)) {
+						if (MDB2::isError($result)) {
 							die (_("Database error"));
 						}
 						$cnt = $result->numRows();
@@ -714,7 +714,7 @@ if (! empty($action)){
 		} else {
 			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
 			if (!$result->numRows()){
@@ -725,10 +725,10 @@ if (! empty($action)){
 				if (!empty($_GET['confirmed']) && empty($_GET['cancel'])) {
 			                $query = "SELECT freeaddress FROM domain WHERE domain_name='".$_GET['domain']."'";
 					$result = $handle->query($query);
-					if (DB::isError($result)) {
+					if (MDB2::isError($result)) {
 						die (_("Database error"));
 					}
-					$row = $result->fetchRow(DB_FETCHMODE_ASSOC, 0);
+					$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 					$freeaddress = $row['freeaddress'];
 					if ($freeaddress != "YES") {
 						$valid_alias = ValidMail($_GET['newalias']."@".$_GET['domain']);
@@ -756,7 +756,7 @@ if (! empty($action)){
 						if ($fullalias != $_GET['alias']) {
 							$query = "SELECT alias FROM virtual WHERE alias='".$fullalias."'";
 							$result = $handle->query($query);
-							if (DB::isError($result)) {
+							if (MDB2::isError($result)) {
 								die (_("Database error"));
 							}
 							$cnt = $result->numRows();
@@ -784,7 +784,7 @@ if (! empty($action)){
 		} else {
 			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
 			if (!$result->numRows()){
@@ -804,7 +804,7 @@ if (! empty($action)){
 		} else {
 			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
 			if (!$result->numRows()){
@@ -825,7 +825,7 @@ if (! empty($action)){
 		} else {
 			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
 			if (!$result->numRows()){
@@ -846,7 +846,7 @@ if (! empty($action)){
 		} else {
 			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
 			if (!$result->numRows()){
@@ -895,7 +895,7 @@ if (! empty($action)){
 					}
 					$query = "SELECT domain_name FROM domain WHERE domain_name='".$_GET['domain']."' OR prefix='".$_GET['prefix']."'";
 					$result = $handle->query($query);
-					if (DB::isError($result)) {
+					if (MDB2::isError($result)) {
 						die (_("Database error"));
 					}
 					if ($result->numRows()){
@@ -942,7 +942,7 @@ if (! empty($action)){
 				} else {
 					$query = "SELECT domain_name FROM domain WHERE domain_name='".$_GET['newdomain']."' AND domain_name!='".$_GET['domain']."' OR prefix='".$_GET['newprefix']."' AND prefix!='".$_GET['prefix']."'";
 					$result = $handle->query($query);
-					if (DB::isError($result)) {
+					if (MDB2::isError($result)) {
 						die (_("Database error"));
 					}
 					if ($result->numRows()){
@@ -1093,7 +1093,7 @@ if (! empty($action)){
 		elseif (!empty($_GET['adddest'])) {
 			$query = "SELECT * FROM virtual WHERE alias='".$_GET['alias']."' AND dest='".$_GET['dest']."' AND username='".$_GET['domain']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			}
 			if ($result->numRows()){

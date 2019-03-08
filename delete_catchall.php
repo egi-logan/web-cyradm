@@ -16,7 +16,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 		if (!empty($_GET['confirmed']) AND empty($_GET['cancel'])){
 			$query = "DELETE from virtual WHERE alias='@".$_GET['domain']."'";
 			$result = $handle->query($query);
-			if (DB::isError($result)) {
+			if (MDB2::isError($result)) {
 				die (_("Database error"));
 			} else {
 				?>

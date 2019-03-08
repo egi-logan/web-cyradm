@@ -14,7 +14,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 
 	<?php
 	if ($authorized) {
-		$query = "SELECT COUNT(DISTINCT(alias)) FROM virtual WHERE username = '".$_GET['domain']."'";
+		$query = "SELECT COUNT(DISTINCT(alias)) FROM `virtual` WHERE username = '".$_GET['domain']."'";
 		$alias_count = $handle->getOne($query);
 		$row_pos = (empty($_GET['row_pos']))?(0):($_GET['row_pos']);
 		
@@ -53,7 +53,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 		</tr>
 	<?php
 
-		$query = "SELECT DISTINCT(alias) FROM virtual WHERE username = '".$_GET['domain']."'";
+		$query = "SELECT DISTINCT(alias) FROM `virtual` WHERE username = '".$_GET['domain']."'";
 		$result = $handle->limitQuery($query,$row_pos,10);
 		$num_alias = $result->numRows();
 		$b = 0;
@@ -73,7 +73,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 			<td>	
 		<?php
 	
-			$query1 = "SELECT dest FROM virtual WHERE alias = '".$alias."'";
+			$query1 = "SELECT dest FROM `virtual` WHERE alias = '".$alias."'";
 			#$result1 = $handle->query($query1);
 			$result1 = $handle->Query($query1);
 			$cnt = $result1->numRows();

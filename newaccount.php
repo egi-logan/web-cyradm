@@ -14,9 +14,9 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 	<?php
 	if ($authorized){
 		if (empty($_POST['confirmed'])){
-			$query = "SELECT * FROM domain WHERE domain_name='".$_GET['domain']."'";
+			$query = "SELECT * FROM `domain` WHERE domain_name='".$_GET['domain']."'";
 		} else {
-			$query = "SELECT * FROM domain WHERE domain_name='".$_POST['domain']."'";
+			$query = "SELECT * FROM `domain` WHERE domain_name='".$_POST['domain']."'";
 		}
 		$result = $handle->query($query);
 		if (MDB2::isError($result)) {
@@ -48,7 +48,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 		
 		if (empty($_POST['confirmed'])){
 			# Why prefix, not domain_name?
-			$query = "SELECT * FROM accountuser WHERE prefix='$prefix' order by username";
+			$query = "SELECT * FROM `accountuser` WHERE prefix='$prefix' order by username";
 			$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));
@@ -280,7 +280,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 			$pwd = new password;
 			$password = $pwd->encrypt($_POST['password'], $CRYPT);
 			
-			$query = "INSERT INTO accountuser (username, password, prefix, domain_name) VALUES ('".$username."','".$password."','".$prefix."','".$_POST['domain']."')";
+			$query = "INSERT INTO `accountuser` (username, password, prefix, domain_name) VALUES ('".$username."','".$password."','".$prefix."','".$_POST['domain']."')";
 			$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));

@@ -114,7 +114,7 @@ if ($authorized){
 				include_once WC_BASE . '/lib/sieve_strs.php';
 				$daemon = new sieve($CYRUS['HOST'],"2000", $CYRUS['ADMIN'], $CYRUS['PASS'], $_GET['username']);
 
-    				$query = "SELECT * FROM domain WHERE domain_name='".$_GET['domain']."'";
+    				$query = "SELECT * FROM `domain` WHERE domain_name='".$_GET['domain']."'";
 				$result = $handle->query($query);
 				$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 				$freeaddress = $row['freeaddress'];

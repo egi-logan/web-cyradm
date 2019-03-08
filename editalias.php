@@ -17,14 +17,14 @@ if ($authorized) {
 		$_GET['alias'] = $_GET['alias']."@".$_GET['domain'];
 	}
 	if (!empty($_GET['adddest'])) {
-		$query = "INSERT INTO virtual (alias,dest,username) values ('".$_GET['alias']."', '".$_GET['dest']."', '".$_GET['domain']."')";
+		$query = "INSERT INTO `virtual` (alias,dest,username) values ('".$_GET['alias']."', '".$_GET['dest']."', '".$_GET['domain']."')";
 		$result = $handle->query($query);
 		if (MDB2::isError($handle)) {
 			print _("There was an error adding ".$_GET['dest']." to ".$_GET['alias'].".");
 		}
 	}
 
-	$query = "SELECT dest, username FROM virtual WHERE alias = '".$_GET['alias']."' AND username<>''";
+	$query = "SELECT dest, username FROM `virtual` WHERE alias = '".$_GET['alias']."' AND username<>''";
 	$result = $handle->query($query);
 	$alias_count = $result->numRows($result);
 

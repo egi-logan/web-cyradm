@@ -21,7 +21,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 		</h3>
     <?php
                 require_once WC_BASE . '/config/conf.php';
-                $query1 = "SELECT * FROM domain WHERE domain_name='$domain'";
+                $query1 = "SELECT * FROM `domain` WHERE domain_name='$domain'";
 		
                 $handle = MDB2::connect($DB['DSN'], true);
                 if (MDB2::isError($handle)) {
@@ -47,7 +47,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 		
 		if (empty($confirmed)){
 		
-	        $query2         = "SELECT * FROM virtual WHERE username='$prefix' order by alias";
+	        $query2         = "SELECT * FROM `virtual` WHERE username='$prefix' order by alias";
 		$result2        = $handle->query($query2);
 		$cnt2           = $result2->numRows($result2);
 		

@@ -34,7 +34,7 @@ if ($authorized) {
 
 
 	#####  Show matching Domains first #######
-	$query = "SELECT * FROM domain AS a WHERE domain_name LIKE '%".addslashes($_GET['searchstring'])."%' AND ".$allowed_domains1."') ORDER BY domain_name";
+	$query = "SELECT * FROM `domain` AS a WHERE domain_name LIKE '%".addslashes($_GET['searchstring'])."%' AND ".$allowed_domains1."') ORDER BY domain_name";
 	$result = $handle->query($query);
 	$cnt = $result->numRows();
 
@@ -105,7 +105,7 @@ if ($authorized) {
 	print "</table>";
 
 	############ And now show the users matching the search query ###########
-	$query = "SELECT DISTINCT a.username, a.domain_name FROM virtual as v, accountuser as a WHERE ((v.username LIKE '%".addslashes($_GET['searchstring'])."%') OR (v.alias LIKE '%".addslashes($_GET['searchstring'])."%')) AND (v.username=a.username) AND ".$allowed_domains1."') ORDER BY username";
+	$query = "SELECT DISTINCT a.username, a.domain_name FROM `virtual` as v, `accountuser` as a WHERE ((v.username LIKE '%".addslashes($_GET['searchstring'])."%') OR (v.alias LIKE '%".addslashes($_GET['searchstring'])."%')) AND (v.username=a.username) AND ".$allowed_domains1."') ORDER BY username";
 	$result = $handle->query($query);
 	$total = $result->numRows();
 
@@ -113,7 +113,7 @@ if ($authorized) {
 	if (empty($row_pos)) {
 		$row_pos = 0;
 	}
-        $query = "SELECT DISTINCT a.* FROM virtual as v, accountuser as a WHERE ((v.username LIKE '%".$_GET['searchstring']."%') OR (v.alias LIKE '%".addslashes($_GET['searchstring'])."%')) AND (v.username=a.username) AND ".$allowed_domains1."') ORDER BY username";
+        $query = "SELECT DISTINCT a.* FROM `virtual` as v, `accountuser` as a WHERE ((v.username LIKE '%".$_GET['searchstring']."%') OR (v.alias LIKE '%".addslashes($_GET['searchstring'])."%')) AND (v.username=a.username) AND ".$allowed_domains1."') ORDER BY username";
 	$result = $handle->limitQuery($query,$row_pos,10);
 	$cnt = $result->numRows();
 
@@ -169,7 +169,7 @@ if ($authorized) {
 			print "\n<td valign=\"middle\"><a href=\"index.php?action=deleteaccount&domain=".$domain."&username=".$username."\">"._("Delete account")."</a></td>";
 			print "\n<td valign=\"middle\"><a href=\"index.php?action=catch&domain=".$domain."&username=".$username."\">"._("Set catch all")."</a></td>";
 			print "\n<td valign=\"middle\">";
-			$query2 = "SELECT alias,status FROM virtual WHERE username='".$username."'";
+			$query2 = "SELECT alias,status FROM `virtual` WHERE username='".$username."'";
 			$result2 = $handle->query($query2);
 			$cnt2 = $result2->numRows();
 
@@ -178,7 +178,7 @@ if ($authorized) {
 				$row2 = $result2->fetchRow(MDB2_FETCHMODE_ASSOC, $c2);
 				print $row2['alias']."<br>";
 			}
-			$query3 = "SELECT dest FROM virtual WHERE alias='".$username."' AND username=''";
+			$query3 = "SELECT dest FROM `virtual` WHERE alias='".$username."' AND username=''";
 			$result3 = $handle->query($query3);
 			$row = $result3->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 			if (is_array($row)) {
@@ -197,7 +197,7 @@ if ($authorized) {
 			print "</td>\n<td valign=\"middle\">";
 			print $username;
 			print "</td>\n<td align=\"center\" valign=\"middle\">";
-			$query3 = "SELECT * FROM log WHERE user='".$username."' ORDER BY time DESC";
+			$query3 = "SELECT * FROM `log` WHERE user='".$username."' ORDER BY time DESC";
 			$result3 = $handle->query($query3);
 			if (! MDB2::isError($result3)){
 				$row3 = $result3->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
@@ -280,7 +280,7 @@ if ($authorized) {
 	}
 
 	################ And now show the matching aliases #######################
-	$query3 = "SELECT DISTINCT alias, username FROM virtual WHERE (((dest LIKE '%".$_GET['searchstring']."%') OR (alias LIKE '%".$_GET['searchstring']."%')) AND (dest <> username) AND (username<>'')) AND ".$allowed_domains3."') ORDER BY username";	
+	$query3 = "SELECT DISTINCT alias, username FROM `virtual` WHERE (((dest LIKE '%".$_GET['searchstring']."%') OR (alias LIKE '%".$_GET['searchstring']."%')) AND (dest <> username) AND (username<>'')) AND ".$allowed_domains3."') ORDER BY username";	
 	$result3 = $handle->query($query3);
 	$total = $result3->numRows();
 	print "<h3>"._("Total aliases matching").": ".$total."</h3>";
@@ -312,7 +312,7 @@ if ($authorized) {
                         <td><?php echo $alias; ?></td>
                         <td>
 <?php
-			$query4 = "SELECT dest FROM virtual WHERE alias='".$alias."' AND username='".$domain."'";
+			$query4 = "SELECT dest FROM `virtual` WHERE alias='".$alias."' AND username='".$domain."'";
 			$result4 = $handle->limitQuery($query4, 0, 3);
 			$num_dest = $result4->numRows ($result4);
 			for ($d=0; $d<$num_dest; $d++) {
@@ -322,7 +322,7 @@ if ($authorized) {
 				}
 				echo $row2['dest'];
 			}
-			$query5 = "SELECT COUNT(dest) FROM virtual WHERE alias='".$alias."' AND username='".$domain."'";
+			$query5 = "SELECT COUNT(dest) FROM `virtual` WHERE alias='".$alias."' AND username='".$domain."'";
 			$num_dests = $handle->getOne($query5);
 			if ($num_dests>3) {
 				print ", ... ";

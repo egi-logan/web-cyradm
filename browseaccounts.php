@@ -30,7 +30,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 	<?php
 	if (isset($_GET['row_pos'])) $_SESSION['account_row_pos'] = $_GET['row_pos'];
 
-	$query = "SELECT * FROM accountuser where domain_name='".$_GET['domain']."' ORDER BY username";
+	$query = "SELECT * FROM `accountuser` where domain_name='".$_GET['domain']."' ORDER BY username";
 	$result = $handle->query($query);
 	if (MDB2::isError($result)) {
 		die (_("Database error"));
@@ -115,14 +115,14 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 					$domain = $row['domain_name'];
 					$username = $row['username'];
 
-					$query2 = "SELECT * FROM virtual WHERE dest='".$username."' AND username='".$username."'"; # AND alias  !='$username'"; 
+					$query2 = "SELECT * FROM `virtual` WHERE dest='".$username."' AND username='".$username."'"; # AND alias  !='$username'"; 
 					$result2 = $handle->query($query2);
 					if (MDB2::isError($result2)) {
 						die (_("Database error"));
 					}
 					$cnt2 = $result2->numRows($result2);
 
-					$query3 = "SELECT * FROM log WHERE user='".$username."' ORDER BY time DESC";
+					$query3 = "SELECT * FROM `log` WHERE user='".$username."' ORDER BY time DESC";
 					$result3 = $handle->query($query3); 
 					if (! MDB2::isError($result3)){
 						$row3 = $result3->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
@@ -168,7 +168,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 								$row2 = $result2->fetchRow(MDB2_FETCHMODE_ASSOC, $c2);
 								print $row2['alias'] . "<br>";
 							}
-				                        $query4 = "SELECT * FROM virtual WHERE alias='".$username."' AND username=''";
+				                        $query4 = "SELECT * FROM `virtual` WHERE alias='".$username."' AND username=''";
 							$result4 = $handle->query($query4);
 							if (MDB2::isError($result4)) {
 								die (_("Database error"));

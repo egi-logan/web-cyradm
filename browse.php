@@ -35,14 +35,14 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 				<?php
 
 				if (! isset($_SESSION['allowed_domains'])) {
-					#$query = "SELECT * FROM domain ORDER BY domain_name";
-					$query = "SELECT * FROM domain ORDER BY ".$_SESSION['domain_orderby']." ".$_SESSION['domain_orderby_desc'];
+					#$query = "SELECT * FROM `domain` ORDER BY domain_name";
+					$query = "SELECT * FROM `domain` ORDER BY ".$_SESSION['domain_orderby']." ".$_SESSION['domain_orderby_desc'];
 				} else {
 					$domains = '';
 					foreach ($_SESSION['allowed_domains'] as $allowed_domain) {
 						$domains .= $allowed_domain."' OR domain_name='";
 					}
-					$query = "SELECT * FROM domain WHERE domain_name='$domains' ORDER BY ".$_SESSION['domain_orderby']." ".$_SESSION['domain_orderby_desc'];
+					$query = "SELECT * FROM `domain` WHERE domain_name='$domains' ORDER BY ".$_SESSION['domain_orderby']." ".$_SESSION['domain_orderby_desc'];
 				}
 
 				$result = $handle->query($query);

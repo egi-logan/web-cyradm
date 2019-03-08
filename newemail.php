@@ -13,7 +13,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 
 		<?php
 		if ($authorized) {
-	                $query = "SELECT freeaddress FROM domain WHERE domain_name='".$_GET['domain']."'";
+	                $query = "SELECT freeaddress FROM `domain` WHERE domain_name='".$_GET['domain']."'";
 	 		$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));

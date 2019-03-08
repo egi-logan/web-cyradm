@@ -17,7 +17,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 
 		<?php
 		if ($authorized) {
-			$query = "SELECT * FROM adminuser";
+			$query = "SELECT * FROM `adminuser`";
 			$row_pos = (empty($_GET['row_pos']))?(0):($_GET['row_pos']);
 
 			# Fist query is for displaying 
@@ -96,7 +96,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 
 						$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, $c);
 						$username = $row['username'];
-						$query2 = "SELECT * FROM domainadmin WHERE adminuser='$username'";
+						$query2 = "SELECT * FROM `domainadmin` WHERE adminuser='$username'";
 						$result2 = $handle->query($query2);
 						$cnt2 = $result2->numRows();
 

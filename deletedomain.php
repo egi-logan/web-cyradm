@@ -12,7 +12,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 	<td valign="top">
 <?php
 if ($authorized) {
-	$query = "SELECT * FROM accountuser WHERE domain_name='".$_GET['domain']."' ORDER BY username";
+	$query = "SELECT * FROM `accountuser` WHERE domain_name='".$_GET['domain']."' ORDER BY username";
 	$result1 = $handle->query($query);
 	$cnt1 = $result1->numRows();
 
@@ -71,14 +71,14 @@ if ($authorized) {
 					$cyr_conn = new cyradm;
 					$cyr_conn->imap_login();
 
-					# First Delete all stuff related to the domain from the database
+					# First Delete all stuff related to the `domain` from the database
 					$query = "DELETE FROM virtual WHERE alias LIKE '%@".$_GET['domain']."'";
 					$result = $handle->query($query);
 
-					$query = "DELETE FROM accountuser WHERE domain_name='".$_GET['domain']."'";
+					$query = "DELETE FROM `accountuser` WHERE domain_name='".$_GET['domain']."'";
 					$result = $handle->query($query);
 
-					$query = "DELETE FROM domain WHERE domain_name='".$_GET['domain']."'";
+					$query = "DELETE FROM `domain` WHERE domain_name='".$_GET['domain']."'";
 					$result = $handle->query($query);
 
 					for ($i=0; $i<$cnt1; $i++) {
@@ -99,31 +99,31 @@ if ($authorized) {
 
 					}
 
-					# Finally the domain must be removed from the domainadmin table
-					$query = "SELECT * FROM domainadmin WHERE domain_name='".$_GET['domain']."'";
+					# Finally the `domain` must be removed from the `domainadmin` table
+					$query = "SELECT * FROM `domainadmin` WHERE domain_name='".$_GET['domain']."'";
 					$result = $handle->query($query);
 					$cnt = $result->numRows();
 					for ($i=0; $i < $cnt; $i++) {
 
-						# After getting the resulttable we search for the adminuser 
+						# After getting the resulttable we search for the `adminuser` 
 						# in each row
 						$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC,$i);
 						$username = $row['adminuser'];
 
-						$query = "SELECT * FROM domainadmin where adminuser='".$username."'";
+						$query = "SELECT * FROM `domainadmin` where adminuser='".$username."'";
 						$result2 = $handle->query($query);
 						$cnt2 = $result1->numRows();
 
-						# If the adminuser is only the admin for the domain to be
-						# deleted, then this adminuser also needs to be deleted
+						# If the `adminuser` is only the admin for the `domain` to be
+						# deleted, then this `adminuser` also needs to be deleted
 						if ($cnt2 == 1){
-							$query = "DELETE FROM adminuser where username='".$username."'";
+							$query = "DELETE FROM `adminuser` where username='".$username."'";
 							$result = $handle->query($query);
 						}
 					}
 
-					# Finally delete every entry with the domain to be deleted
-					$query = "DELETE FROM domainadmin where domain_name='".$_GET['domain']."'";
+					# Finally delete every entry with the `domain` to be deleted
+					$query = "DELETE FROM `domainadmin` where domain_name='".$_GET['domain']."'";
 					$result = $handle->query($query);
 					?>
 					<h3>

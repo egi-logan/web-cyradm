@@ -121,8 +121,8 @@ if (MDB2::isError($handle)) {
 	die (_("Database error"));
 }
 
-# We check and remember list of domains for domain admin
-$query = "SELECT * FROM domainadmin WHERE adminuser='".$_SESSION['user']."'";
+# We check and remember list of domains for `domain` admin
+$query = "SELECT * FROM `domainadmin` WHERE adminuser='".$_SESSION['user']."'";
 $result = $handle->query($query);
 if (MDB2::isError($result)) {
 	die (_("Database error"));
@@ -185,7 +185,7 @@ if (! empty($action)){
 			$authorized = TRUE;
 		}
 		break;
-#OK########################### Check input if adminuser ###############################################
+#OK########################### Check input if `adminuser` ###############################################
 	case "adminuser":
 		if ($_SESSION['admintype'] != 0) {
 			$authorized = FALSE;
@@ -230,7 +230,7 @@ if (! empty($action)){
 				$err_msg = _("New passwords are not equal. Password not changed");
 			} else {
 				# Check if admin already exists
-				$query = "SELECT * FROM adminuser WHERE username='".$_POST['newadminuser']."'";
+				$query = "SELECT * FROM `adminuser` WHERE username='".$_POST['newadminuser']."'";
 				$result = $handle->query($query);
 				if (MDB2::isError($result)) {
 					die (_("Database error"));
@@ -238,15 +238,15 @@ if (! empty($action)){
 				if ($result->numRows()){
 					$authorized = FALSE;
 					$err_msg = _("Username already exist");
-				# If domain is not set or admin will be superuser: that's all
+				# If `domain` is not set or admin will be superuser: that's all
 				} elseif (empty($_POST['newdomain']) || $_POST['newadmintype'] == 0) {
 					$authorized = TRUE;
 				} elseif (!ValidDomain($_POST['newdomain'])) {
 					$authorized = FALSE;
-					$err_msg = _("Invalid domain name");
+					$err_msg = _("Invalid `domain` name");
 				} else {
-					# Check if domain already exists
-					$query="SELECT domain_name FROM domain WHERE domain_name='".$_POST['newdomain']."'";
+					# Check if `domain` already exists
+					$query="SELECT domain_name FROM `domain` WHERE domain_name='".$_POST['newdomain']."'";
 					$result= $handle->query($query);
 					if (MDB2::isError($result)) {
 						die (_("Database error"));
@@ -290,7 +290,7 @@ if (! empty($action)){
 				$authorized = FALSE;
 				$err_msg = _("New passwords are not equal. Password not changed");
 			} else {
-				$query = "SELECT type FROM adminuser WHERE username='".$_POST['username']."'";
+				$query = "SELECT type FROM `adminuser` WHERE username='".$_POST['username']."'";
 				$result = $handle->query($query);
 				if (MDB2::isError($result)) {
 					die (_("Database error"));
@@ -304,7 +304,7 @@ if (! empty($action)){
 						# Web-cyradm again
 
 						# Query to get the count of superusers
-						$query = "SELECT type FROM adminuser WHERE type='0'";
+						$query = "SELECT type FROM `adminuser` WHERE type='0'";
 						$result = $handle->query($query);
 						if (MDB2::isError($result)) {
 							die (_("Database error"));
@@ -322,15 +322,15 @@ if (! empty($action)){
 # TODO: Checks for array of domains $_POST['resp_domain']
 				//if (!empty($_POST['resp_domain'])) {
 				//}
-				# If domain is not set: that's all
+				# If `domain` is not set: that's all
 				if (empty($_POST['newdomain']) || $_POST['newtype'] == 0) {
 					$authorized = TRUE;
 				} elseif (!ValidDomain($_POST['newdomain'])) {
 					$authorized = FALSE;
-					$err_msg = _("Invalid domain name");
+					$err_msg = _("Invalid `domain` name");
 				} else {
-					# Check if domain already exists
-					$query = "SELECT domain_name FROM domain WHERE domain_name='".$_POST['newdomain']."'";
+					# Check if `domain` already exists
+					$query = "SELECT domain_name FROM `domain` WHERE domain_name='".$_POST['newdomain']."'";
 					$result = $handle->query($query);
 					if (MDB2::isError($result)) {
 						die (_("Database error"));
@@ -339,7 +339,7 @@ if (! empty($action)){
 						$authorized = FALSE;
 						$err_msg = _("No such domain");
 					} else {
-						$query = "SELECT * FROM domainadmin WHERE adminuser='".$_POST['username']."' AND domain_name='".$_POST['newdomain']."'";
+						$query = "SELECT * FROM `domainadmin` WHERE adminuser='".$_POST['username']."' AND domain_name='".$_POST['newdomain']."'";
 						$result = $handle->query($query);
 						if (MDB2::isError($result)) {
 							die (_("Database error"));
@@ -380,7 +380,7 @@ if (! empty($action)){
 				$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 			} else {
 				#Determine what type of admin should be deleted
-				$query = "SELECT type FROM adminuser WHERE username='".$_GET['username']."'";
+				$query = "SELECT type FROM `adminuser` WHERE username='".$_GET['username']."'";
 				$result = $handle->query($query);
 				if (MDB2::isError($result)) {
 					die (_("Database error"));
@@ -389,7 +389,7 @@ if (! empty($action)){
 				$type = $row['type'];
 
 				# Query to get the count of superusers
-				$query = "SELECT type FROM adminuser WHERE type='0'";
+				$query = "SELECT type FROM `adminuser` WHERE type='0'";
 				$result = $handle->query($query);
 				if (MDB2::isError($result)) {
 					die (_("Database error"));
@@ -450,7 +450,7 @@ if (! empty($action)){
 					$_POST['username'] = $_POST['email'];
 				}
 				# Check to see if there's an account with the same username
-				$query = "SELECT * FROM accountuser WHERE username='".$_POST['username']."'";
+				$query = "SELECT * FROM `accountuser` WHERE username='".$_POST['username']."'";
 				$result = $handle->query($query);
 				if (MDB2::isError($result)) {
 					die (_("Database error"));
@@ -462,7 +462,7 @@ if (! empty($action)){
 				}
 				
 				# Check to see if there's an email with the same name
-				$query = "SELECT alias FROM virtual WHERE alias='".$_POST['email']."@".$_POST['domain']."'";
+				$query = "SELECT alias FROM `virtual` WHERE alias='".$_POST['email']."@".$_POST['domain']."'";
 				$result = $handle->query($query);
 				if (MDB2::isError($result)) {
 					die (_("Database error"));
@@ -475,7 +475,7 @@ if (! empty($action)){
 				
 				# We need to check if the requested quota is NOT higher than the defined maximum Quota
 				# Superusers can override
-				$query = "SELECT quota FROM domain WHERE domain_name='".$_POST['domain']."'";
+				$query = "SELECT quota FROM `domain` WHERE domain_name='".$_POST['domain']."'";
 				$result = $handle->query($query);
 				$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 				# $quota2 is the allowed quota, $quota the requested quota for the account
@@ -501,7 +501,7 @@ if (! empty($action)){
 			$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 		} else {
 			# it's needed to defend users from not allowed domains
-			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
+			$query = "SELECT username FROM `accountuser` WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));
@@ -526,7 +526,7 @@ if (! empty($action)){
 			$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 		} else {
 			# it's needed to defend users from not allowed domains
-			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
+			$query = "SELECT username FROM `accountuser` WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));
@@ -547,7 +547,7 @@ if (! empty($action)){
 				$authorized = FALSE;
 				$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 			} else {
-				$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
+				$query = "SELECT username FROM `accountuser` WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 				$result = $handle->query($query);
 				if (MDB2::isError($result)) {
 					die (_("Database error"));
@@ -568,7 +568,7 @@ if (! empty($action)){
 				$authorized = FALSE;
 				$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 			} else {
-				$query = "SELECT username FROM accountuser WHERE username='".$_POST['username']."' AND domain_name='".$_POST['domain']."'";
+				$query = "SELECT username FROM `accountuser` WHERE username='".$_POST['username']."' AND domain_name='".$_POST['domain']."'";
 				$result = $handle->query($query);
 				if (MDB2::isError($result)) {
 					die (_("Database error"));
@@ -611,7 +611,7 @@ if (! empty($action)){
 						$authorized = FALSE;
 						$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 					} else {
-						$query = "SELECT quota FROM domain WHERE domain_name='".$_POST['domain']."'";
+						$query = "SELECT quota FROM `domain` WHERE domain_name='".$_POST['domain']."'";
 						$result = $handle->query($query);
 						if (MDB2::isError($result)) {
 							die (_("Database error"));
@@ -620,7 +620,7 @@ if (! empty($action)){
 						$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 						$max_quota = $row['quota'];
 					
-						$query = "SELECT * FROM accountuser WHERE username='".$_POST['username']."' AND domain_name='".$_POST['domain']."'";
+						$query = "SELECT * FROM `accountuser` WHERE username='".$_POST['username']."' AND domain_name='".$_POST['domain']."'";
 						$result = $handle->query($query);
 						if (MDB2::isError($result)) {
 							die (_("Database error"));
@@ -646,7 +646,7 @@ if (! empty($action)){
 			$authorized = FALSE;
 			$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 		} else {
-			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
+			$query = "SELECT username FROM `accountuser` WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));
@@ -657,7 +657,7 @@ if (! empty($action)){
 				$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 			} else {
 				if (!empty($_GET['confirmed']) && empty($_GET['cancel'])) {
-			                $query = "SELECT freeaddress FROM domain WHERE domain_name='".$_GET['domain']."'";
+			                $query = "SELECT freeaddress FROM `domain` WHERE domain_name='".$_GET['domain']."'";
 					$result = $handle->query($query);
 					if (MDB2::isError($result)) {
 						die (_("Database error"));
@@ -682,7 +682,7 @@ if (! empty($action)){
 						$err_msg="Reserved Emailadress, request cancelled";
 					# Check to see if there's an email with the same name
 					} else {
-						$query = "SELECT alias FROM virtual WHERE alias='";
+						$query = "SELECT alias FROM `virtual` WHERE alias='";
 						if ($freeaddress != "YES") {
 							$query .= $_GET['alias']."@".$_GET['domain']."'";
 						} else {
@@ -712,7 +712,7 @@ if (! empty($action)){
 			$authorized = FALSE;
 			$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 		} else {
-			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
+			$query = "SELECT username FROM `accountuser` WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));
@@ -723,7 +723,7 @@ if (! empty($action)){
 				$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 			} else {
 				if (!empty($_GET['confirmed']) && empty($_GET['cancel'])) {
-			                $query = "SELECT freeaddress FROM domain WHERE domain_name='".$_GET['domain']."'";
+			                $query = "SELECT freeaddress FROM `domain` WHERE domain_name='".$_GET['domain']."'";
 					$result = $handle->query($query);
 					if (MDB2::isError($result)) {
 						die (_("Database error"));
@@ -754,7 +754,7 @@ if (! empty($action)){
 							$fullalias = $_GET['newalias']."@".$_GET['aliasdomain'];
 						}
 						if ($fullalias != $_GET['alias']) {
-							$query = "SELECT alias FROM virtual WHERE alias='".$fullalias."'";
+							$query = "SELECT alias FROM `virtual` WHERE alias='".$fullalias."'";
 							$result = $handle->query($query);
 							if (MDB2::isError($result)) {
 								die (_("Database error"));
@@ -782,7 +782,7 @@ if (! empty($action)){
 			$authorized = FALSE;
 			$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 		} else {
-			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
+			$query = "SELECT username FROM `accountuser` WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));
@@ -802,7 +802,7 @@ if (! empty($action)){
 			$authorized = FALSE;
 			$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 		} else {
-			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
+			$query = "SELECT username FROM `accountuser` WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));
@@ -823,7 +823,7 @@ if (! empty($action)){
 			$authorized = FALSE;
 			$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 		} else {
-			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
+			$query = "SELECT username FROM `accountuser` WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));
@@ -844,7 +844,7 @@ if (! empty($action)){
 			$authorized = FALSE;
 			$err_msg = _("Security violation detected, action cancelled. Your attempt has been logged.");
 		} else {
-			$query = "SELECT username FROM accountuser WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
+			$query = "SELECT username FROM `accountuser` WHERE username='".$_GET['username']."' AND domain_name='".$_GET['domain']."'";
 			$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));
@@ -859,7 +859,7 @@ if (! empty($action)){
 			}
 		}
 		break;
-#OK##################################### Check new domain name ########################################
+#OK##################################### Check new `domain` name ########################################
 	case "newdomain":
 		if ($_SESSION['admintype'] != 0) {
 			$authorized = FALSE;
@@ -893,7 +893,7 @@ if (! empty($action)){
 					if ($DOMAIN_AS_PREFIX) {
 						$_GET['prefix'] = $_GET['domain'];
 					}
-					$query = "SELECT domain_name FROM domain WHERE domain_name='".$_GET['domain']."' OR prefix='".$_GET['prefix']."'";
+					$query = "SELECT domain_name FROM `domain` WHERE domain_name='".$_GET['domain']."' OR prefix='".$_GET['prefix']."'";
 					$result = $handle->query($query);
 					if (MDB2::isError($result)) {
 						die (_("Database error"));
@@ -940,7 +940,7 @@ if (! empty($action)){
 					$authorized = FALSE;
 					$err_msg = "You must choose a valid prefix for your domain";
 				} else {
-					$query = "SELECT domain_name FROM domain WHERE domain_name='".$_GET['newdomain']."' AND domain_name!='".$_GET['domain']."' OR prefix='".$_GET['newprefix']."' AND prefix!='".$_GET['prefix']."'";
+					$query = "SELECT domain_name FROM `domain` WHERE domain_name='".$_GET['newdomain']."' AND domain_name!='".$_GET['domain']."' OR prefix='".$_GET['newprefix']."' AND prefix!='".$_GET['prefix']."'";
 					$result = $handle->query($query);
 					if (MDB2::isError($result)) {
 						die (_("Database error"));
@@ -1091,7 +1091,7 @@ if (! empty($action)){
 			$err_msg="Reserved Emailadress, request cancelled";
 		} 
 		elseif (!empty($_GET['adddest'])) {
-			$query = "SELECT * FROM virtual WHERE alias='".$_GET['alias']."' AND dest='".$_GET['dest']."' AND username='".$_GET['domain']."'";
+			$query = "SELECT * FROM `virtual` WHERE alias='".$_GET['alias']."' AND dest='".$_GET['dest']."' AND username='".$_GET['domain']."'";
 			$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));

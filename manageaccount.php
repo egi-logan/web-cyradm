@@ -33,7 +33,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 				}
 				$q = $cyr_conn->getquota("user" . $_sep . $_GET['username']);
 
-				$query = "SELECT * FROM accountuser WHERE username ='".$_GET['username']."'";
+				$query = "SELECT * FROM `accountuser` WHERE username ='".$_GET['username']."'";
 				$result = $handle->query($query);
 				if (MDB2::isError($result)) {
 					die (_("Database error"));
@@ -56,7 +56,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 					}
 				}
 				
-				$query = "SELECT status FROM virtual WHERE username ='".$_GET['username']."' LIMIT 1";
+				$query = "SELECT status FROM `virtual` WHERE username ='".$_GET['username']."' LIMIT 1";
 				$result = $handle->query($query);
 
 				if (MDB2::isError($result)) {
@@ -206,7 +206,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 			} else {
 				// Change password
 				if (!empty($_POST['new_password']) && !empty($_POST['confirm_password'])) {
-					$query = "SELECT password FROM accountuser WHERE username='".$_POST['username']."'";
+					$query = "SELECT password FROM `accountuser` WHERE username='".$_POST['username']."'";
 					$result = $handle->query($query);
 					if (MDB2::isError($result)) {
 						die (_("Database error"));
@@ -217,7 +217,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 					if ($PASSWORD_CHANGE_METHOD=="sql"){
 						$pwd = new password;
 						$new_password = $pwd->encrypt($_POST['new_password'], $CRYPT);
-						$query = "UPDATE accountuser SET password='$new_password' WHERE username='".$_POST['username']."'";
+						$query = "UPDATE `accountuser` SET password='$new_password' WHERE username='".$_POST['username']."'";
 						$result = $handle->query($query);
 						if (MDB2::isError($result)) {
 							die (_("Database error"));
@@ -252,9 +252,9 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 				if (empty($_POST['smtp'])) {
 					$_POST['smtp'] = 0;
 				}
-				$query = "UPDATE accountuser SET imap='".$_POST['imap']."', pop='".$_POST['pop']."', sieve='".$_POST['sieve']."', smtpauth='".$_POST['smtpauth']."' WHERE username='".$_POST['username']."'";
+				$query = "UPDATE `accountuser` SET imap='".$_POST['imap']."', pop='".$_POST['pop']."', sieve='".$_POST['sieve']."', smtpauth='".$_POST['smtpauth']."' WHERE username='".$_POST['username']."'";
 				$result1 = $handle->query($query);
-				$query = "UPDATE virtual SET status='".$_POST['smtp']."' WHERE username='".$_POST['username']."'";
+				$query = "UPDATE `virtual` SET status='".$_POST['smtp']."' WHERE username='".$_POST['username']."'";
 				$result2 = $handle->query($query);
 				if ($result1 && $result2) {
 					print "<h3>"._("Services successfully changed")."</h3>";
@@ -269,7 +269,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 				}
 				$q = $cyr_conn->getquota("user" . $_sep . $_POST['username']);
 				if ($q['qmax']!=$_POST['quota']) {
-				$query = "SELECT prefix,domainquota FROM domain WHERE domain_name='".$_POST['domain']."'";
+				$query = "SELECT prefix,domainquota FROM `domain` WHERE domain_name='".$_POST['domain']."'";
 				$result = $handle->query($query);
 				if (MDB2::isError($result)) {
 					die (_("Database error"));
@@ -279,11 +279,11 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 				$prefix = $row['prefix'];
 				$domain_quota = $row['domainquota'];
 
-				// for change bigger->smaler or none->set we don't want domain quota checks
+				// for change bigger->smaler or none->set we don't want `domain` quota checks
 				if ($domain_quota!=0 && $q['qmax']<(int)$_POST['quota'] && $q['qmax']!="NOT-SET") {
 					$used_domain_quota = 0;
 
-					$query = "SELECT username FROM accountuser WHERE prefix='$prefix' ORDER BY username";
+					$query = "SELECT username FROM `accountuser` WHERE prefix='$prefix' ORDER BY username";
 					$result = $handle->query($query);
 					if (MDB2::isError($result)) {
 						die (_("Database error"));

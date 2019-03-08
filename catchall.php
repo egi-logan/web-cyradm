@@ -20,7 +20,7 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 	<?php
 	if ($authorized) {
 		if (empty($_GET['confirmed'])){
-			$query = "SELECT * FROM virtual WHERE alias='@".$_GET['domain']."'";
+			$query = "SELECT * FROM `virtual` WHERE alias='@".$_GET['domain']."'";
 			$result = $handle->query($query);
 			$cnt = $result->numRows();
 			$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
@@ -99,10 +99,10 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 		} elseif (!empty($_GET['confirmed']) && empty($_GET['cancel'])){
 
 			# First Delete the entry from the database
-			$query = "DELETE FROM virtual WHERE alias='@".$_GET['domain']."'";
+			$query = "DELETE FROM `virtual` WHERE alias='@".$_GET['domain']."'";
 			$result = $handle->query($query);
 			# And then add the new one
-			$query = "INSERT INTO virtual (alias, dest, username, status) values ('@".$_GET['domain']."' , '$username' , '$username' , '1')";
+			$query = "INSERT INTO `virtual` (alias, dest, username, status) values ('@".$_GET['domain']."' , '$username' , '$username' , '1')";
 			$result = $handle->query($query);
 			if (MDB2::isError($result)) {
 				die (_("Database error"));

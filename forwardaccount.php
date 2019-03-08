@@ -15,11 +15,11 @@ if ($authorized){
 	if (!empty($_GET['confirmed'])) {
 		if (!empty($_GET['setforward']) && $_GET['setforward'] == "1") {
 			// delete all first
-			$query = "DELETE FROM virtual WHERE alias='".$_GET['username']."' AND username=''";
+			$query = "DELETE FROM `virtual` WHERE alias='".$_GET['username']."' AND username=''";
 			$result = $handle->query($query);
 			$forwards = explode("\n", $_GET['forwardto']);
 			reset($forwards);
-			$query = "INSERT INTO virtual (alias,dest) VALUES ('".$_GET['username']."', '";
+			$query = "INSERT INTO `virtual` (alias,dest) VALUES ('".$_GET['username']."', '";
 			$q = array();
 			while (list(, $forward) = each($forwards)) {
 				// insert new forwards
@@ -35,13 +35,13 @@ if ($authorized){
 			$result = $handle->query($query);
 			$msg = _("Forward set");
 		} elseif (!empty($_GET['setforward']) && $_GET['setforward'] == "2") {
-			$query = "DELETE FROM virtual WHERE alias='".$_GET['username']."' AND username=''";
+			$query = "DELETE FROM `virtual` WHERE alias='".$_GET['username']."' AND username=''";
 			$result = $handle->query($query);
 			$msg = _("Forwarding removed");
 		}
 	}
 
-	$query = "SELECT * FROM virtual WHERE alias='".$_GET['username']."' AND username=''";
+	$query = "SELECT * FROM `virtual` WHERE alias='".$_GET['username']."' AND username=''";
 	$result = $handle->query($query);
 	$cnt = $result->numRows();
 	if ($cnt) {

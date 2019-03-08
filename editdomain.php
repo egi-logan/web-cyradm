@@ -37,7 +37,7 @@ if ($authorized) {
 				// END Andreas Kreisl : freenames
 				
 				$query_result = true;
-				$query = "UPDATE domain SET domain_name='".$_GET['newdomain']."', maxaccounts='".$_GET['maxaccounts']."', quota='".$_GET['quota']."', domainquota='".$_GET['domainquota']."', freenames='".$freenames."',freeaddress='".$freeaddress."', folders='".$_GET['defaultfolders']."', prefix='".$_GET['newprefix']."' WHERE domain_name='".$_GET['domain']."'";
+				$query = "UPDATE `domain` SET domain_name='".$_GET['newdomain']."', maxaccounts='".$_GET['maxaccounts']."', quota='".$_GET['quota']."', domainquota='".$_GET['domainquota']."', freenames='".$freenames."',freeaddress='".$freeaddress."', folders='".$_GET['defaultfolders']."', prefix='".$_GET['newprefix']."' WHERE domain_name='".$_GET['domain']."'";
 				$result = $handle->query($query);
 				if (MDB2::isError($result)){
 					$query_result = false;
@@ -58,13 +58,13 @@ if ($authorized) {
 					}
 
 					// update aliases to be associated to the new domain
-					$query = "UPDATE virtual SET username='".$_GET['newdomain']."' WHERE username='".$_GET['domain']."'";
+					$query = "UPDATE `virtual` SET username='".$_GET['newdomain']."' WHERE username='".$_GET['domain']."'";
 					$result = $handle->query($query);
 					if (MDB2::isError($result)){
 						$query_result = false;
 					}
 					// ok, everything ok so far. now let's update all aliases and destinations to the new domainname.					
-					$query = "SELECT alias FROM virtual WHERE alias LIKE '%".$_GET['domain']."'";
+					$query = "SELECT alias FROM `virtual` WHERE alias LIKE '%".$_GET['domain']."'";
 					$result = $handle->query($query);
 					$cnt = $result->numRows();
 					
@@ -72,9 +72,9 @@ if ($authorized) {
 						$row = $result->fetchRow();
 						$oldalias = $row['alias'];
 						$newalias = preg_replace("/".preg_quote($_GET['domain'])."/", $_GET['newdomain'], $oldalias);
-						$query = "UPDATE virtual SET alias = '".$newalias."' WHERE alias = '".$oldalias."'";
+						$query = "UPDATE `virtual` SET alias = '".$newalias."' WHERE alias = '".$oldalias."'";
 						$result1 = $handle->query($query);
-						$query = "UPDATE virtual SET dest = '".$newalias."' WHERE dest = '".$oldalias."'";
+						$query = "UPDATE `virtual` SET dest = '".$newalias."' WHERE dest = '".$oldalias."'";
 						$result2 = $handle->query($query);
 					}
 				}
@@ -96,7 +96,7 @@ if ($authorized) {
 					<?php
 				}
 		} elseif (empty($_GET['confirmed'])) {
-				$query = "SELECT * FROM domain WHERE domain_name='".$_GET['domain']."'";
+				$query = "SELECT * FROM `domain` WHERE domain_name='".$_GET['domain']."'";
 				$result = $handle->query($query);
 				$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 				$domain = $row['domain_name'];

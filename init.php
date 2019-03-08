@@ -13,7 +13,7 @@ if (MDB2::isError($handle)) {
 }
 
 #### Getting admin settings
-$query = "SELECT * FROM settings WHERE username='".$_SESSION['user']."'";
+$query = "SELECT * FROM `settings` WHERE username='".$_SESSION['user']."'";
 $result = $handle->query($query);
 if (MDB2::isError($result)) {
 	die (_("Database error").": "._("Check scripts/upgrade-*.sql files."));
@@ -31,9 +31,9 @@ $_SESSION['account_row_pos'] = 0;
 $_SESSION['account_maxdisplay'] = $_SESSION['maxdisplay'];
 
 ##### Getting admin privilages
-# Check if admin has any domain to administrate.
+# Check if admin has any `domain` to administrate.
 # Superuser has always 1 entry.
-$query = "SELECT * FROM domainadmin WHERE adminuser='".$_SESSION['user']."'";
+$query = "SELECT * FROM `domainadmin` WHERE adminuser='".$_SESSION['user']."'";
 $result = $handle->query($query);
 $cnt = $result->numRows();
 
@@ -44,13 +44,13 @@ if (!$cnt){
 	die ();
 }
 
-# We check and remember admin type (superuser or domain admin).
-$query2 = "SELECT * FROM adminuser WHERE username='".$_SESSION['user']."'";
+# We check and remember admin type (superuser or `domain` admin).
+$query2 = "SELECT * FROM `adminuser` WHERE username='".$_SESSION['user']."'";
 $result2 = $handle->query($query2);
 $row = $result2->fetchRow(MDB2_FETCHMODE_ASSOC, 0);
 $_SESSION['admintype'] = $row['type'];
 
-# We check and remember list of domains for domain admin
+# We check and remember list of domains for `domain` admin
 if ($_SESSION['admintype'] != 0){
 	$allowed_domains = array();
 	

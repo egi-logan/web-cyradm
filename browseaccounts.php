@@ -203,8 +203,16 @@ if ($ref!=$_SERVER['SCRIPT_FILENAME']){
 							<?php
 							if ($DOMAIN_AS_PREFIX){
 								$quota = $cyr_conn->getquota("user/" . $username);
+                                                                 if ($quota['used'] == "in"){
+                                                                   // first one on each page returns something odd
+                                                                   // do it once more
+                                                                   $quota = $cyr_conn->getquota("user/" . $username);
 							} else {
 								$quota = $cyr_conn->getquota("user." . $username);
+                                                                 if ($quota['used'] == "in"){
+                                                                   // first one on each page returns something odd
+                                                                   // do it once more
+                                                                   $quota = $cyr_conn->getquota("user." . $username);
 							}
 
 							if ($quota['used'] != "NOT-SET"){
